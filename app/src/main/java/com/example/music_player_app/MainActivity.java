@@ -22,6 +22,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.music_player_app.fragments.AlbumsFragment;
@@ -139,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
                 String duration = cursor.getString(2);
                 String path = cursor.getString(3);
                 String singer = cursor.getString(4);
+                Log.e("music_info", album + title + duration + path + singer);
 
                 MusicFileModel musicFileModel = new MusicFileModel();
                 musicFileModel.setAlbum(album);
