@@ -22,7 +22,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.View;
 import android.widget.Toast;
 
 import com.example.music_player_app.fragments.AlbumsFragment;
@@ -35,22 +34,25 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE = 1;
 
-    ArrayList<MusicFileModel> musicFileList;
+    public static ArrayList<MusicFileModel> musicFileList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        initViewPager();
-
+        permission();
     }
 
     private void permission(){
-        if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
+        if(checkSelfPermission(Manifest.permission.READ_MEDIA_AUDIO) != PackageManager.PERMISSION_GRANTED){
+            requestPermissions(new String[]{Manifest.permission.READ_MEDIA_AUDIO}, REQUEST_CODE);
+            Toast.makeText(this, "Hello permission", Toast.LENGTH_SHORT).show();
+
         } else {
             Toast.makeText(this, "Cấp quyền thành công", Toast.LENGTH_SHORT).show();
+
+            musicFileList = getAllMusicFile(this);
+            initViewPager();
         }
     }
 
@@ -60,12 +62,11 @@ public class MainActivity extends AppCompatActivity {
 
         if(requestCode == REQUEST_CODE){
             if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                Toast.makeText(this, "Cấp quyền thành công", Toast.LENGTH_SHORT).show();
-                
+
                 musicFileList = getAllMusicFile(this);
+                initViewPager();
             }
             else {
-                Toast.makeText(this, "Bạn phải cấp quyền để sử dụng ứng dụng", Toast.LENGTH_SHORT).show();
                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
             }
         }
